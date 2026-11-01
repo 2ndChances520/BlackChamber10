@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TEAM LEGACY // OPERATION BLACK CHAMBER</title>
+  <style>
+    :root {
+      --bg-dark: #0a0c10;
+      --brass: #c59b27;
+      --brass-dark: #6e5015;
+      --copper: #b86230;
+      --copper-glow: #e27d3c;
+      --amber: #ffaa22;
+      --amber-dim: #774e11;
+      --nixie: #ff6a00;
+      --crt-green: #33ff66;
+      --crt-bg: #031408;
+      --steel: #242b35;
+      --steel-light: #465366;
+      --rivet: #8a9ba8;
+      --font-mono: 'Courier New', Courier, monospace;
+      --font-display: 'Impact', 'Arial Black', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; }
+    body {
+      background: var(--bg-dark);
+      color: #d2dbe6;
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 50%, #151c24 0%, #080a0d 100%);
+    }
+
+    /* Steampunk Console Chassis */
+    #chassis {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(135deg, #3d2b1f 0%, #1c1510 50%, #2b1f16 100%);
+      border: 8px solid #5a3f25;
+      border-radius: 16px;
+      box-shadow: 
+        0 0 0 3px #18110b,
+        0 15px 50px rgba(0,0,0,0.9),
+        inset 0 0 30px rgba(0,0,0,0.8),
+        inset 0 2px 5px rgba(255,200,100,0.3);
+      position: relative;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Rivets around the frame */
+    .rivet {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: radial-gradient(circle at 35% 35%, #e6d3a3, #5a401c 80%);
+      border-radius: 50%;
+      box-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    }
+    .r-tl { top: 6px; left: 6px; }
+    .r-tr { top: 6px; right: 6px; }
+    .r-bl { bottom: 6px; left: 6px; }
+    .r-br { bottom: 6px; right: 6px; }
+    .r-tm { top: 6px; left: 50%; transform: translateX(-50%); }
+    .r-bm { bottom: 6px; left: 50%; transform: translateX(-50%); }
+
+    /* Top Banner Header */
+    header {
+      background: #111;
+      border: 2px solid var(--brass);
+      border-radius: 8px;
+      padding: 10px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.9);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-stamp {
+      background: var(--brass);
+      color: #1a1005;
+      font-weight: 900;
+      padding: 4px 10px;
+      border-radius: 4px;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      border: 1px solid #ffe28a;
+      box-shadow: 0 0 10px var(--brass-dark);
+    }
+    .operation-title {
+      color: var(--amber);
+      font-size: 1.15rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: bold;
+      text-shadow: 0 0 8px rgba(255,170,34,0.6);
+    }
+    .aux-tools {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .audio-btn, .omni-link, .reset-btn {
+      background: #1c232c;
+      border: 1px solid var(--brass);
+      color: var(--brass);
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      font-family: inherit;
+      cursor: pointer;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .audio-btn:hover, .omni-link:hover, .reset-btn:hover {
+      background: var(--brass);
+      color: #111;
+      box-shadow: 0 0 10px var(--amber);
+    }
+
+    /* Vacuum Tubes Row */
+    .tubes-bank {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: -6px;
+    }
+    .tube {
+      width: 32px;
+      height: 48px;
+      background: rgba(255, 200, 100, 0.05);
+      border: 2px solid rgba(255, 170, 34, 0.4);
+      border-bottom: 5px solid #222;
+      border-radius: 16px 16px 4px 4px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: inset 0 0 6px rgba(255, 170, 34, 0.2);
+    }
+    .tube-filament {
+      width: 4px;
+      height: 24px;
+      background: var(--nixie);
+      border-radius: 2px;
+      box-shadow: 0 0 12px var(--nixie), 0 0 20px var(--nixie);
+      animation: tubeFlicker 3s infinite alternate;
+    }
+    @keyframes tubeFlicker {
+      0%, 100% { opacity: 0.85; filter: drop-shadow(0 0 8px var(--nixie)); }
+      45% { opacity: 0.95; }
+      50% { opacity: 0.6; }
+      55% { opacity: 1; }
+      80% { opacity: 0.75; }
+    }
+
+    /* Main Console Viewport Area */
+    .viewport-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .viewport-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Canvas / Field Screen */
+    .field-enclosure {
+      background: #020604;
+      border: 4px solid #332314;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.9), 0 0 15px rgba(0,0,0,0.7);
+    }
+    #gameCanvas {
+      width: 100%;
+      height: 480px;
+      display: block;
+      background: #11161d;
+      image-rendering: pixelated;
+    }
+    .crt-scanlines {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: repeating-linear-gradient(rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,0.35) 3px);
+      pointer-events: none;
+    }
+    .field-hud {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      font-size: 0.8rem;
+      text-shadow: 1px 1px 2px #000;
+    }
+    .hud-badge {
+      background: rgba(8, 14, 10, 0.85);
+      border: 1px solid var(--crt-green);
+      color: var(--crt-green);
+      padding: 4px 8px;
+      border-radius: 4px;
+      letter-spacing: 1px;
+    }
+    .hud-stealth {
+      background: rgba(20, 10, 5, 0.85);
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    /* Legacy Cyber Steampunk Deck Panel (Right Column) */
+    .steam-deck {
+      background: linear-gradient(180deg, #1b2027 0%, #0e1217 100%);
+      border: 3px solid var(--brass);
+      border-radius: 10px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+      position: relative;
+    }
+    .deck-header {
+      border-bottom: 2px solid var(--brass-dark);
+      padding-bottom: 6px;
+      color: var(--brass);
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nixie-digits {
+      font-family: var(--font-display);
+      color: var(--nixie);
+      background: #0d0600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid var(--copper);
+      box-shadow: 0 0 8px rgba(255,106,0,0.5);
+      font-size: 1.1rem;
+    }
+
+    /* Large Detective Portrait in Deck */
+    .portrait-box {
+      display: flex;
+      gap: 12px;
+      background: #090c10;
+      border: 1px solid var(--copper);
+      border-radius: 6px;
+      padding: 8px;
+      align-items: center;
+    }
+    #portraitCanvas {
+      width: 72px;
+      height: 72px;
+      background: #141b22;
+      border: 1px solid var(--brass-dark);
+      border-radius: 4px;
+      image-rendering: pixelated;
+    }
+    .agent-meta {
+      flex: 1;
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+    .agent-name {
+      color: var(--amber);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .agent-status {
+      color: var(--crt-green);
+      font-size: 0.7rem;
+    }
+
+    /* Mission Selector Tabs */
+    .mission-select-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+    }
+    .m-btn {
+      background: #13171e;
+      border: 1px solid var(--steel-light);
+      color: #798799;
+      font-family: inherit;
+      padding: 6px 0;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border-radius: 3px;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+    .m-btn.unlocked {
+      color: var(--brass);
+      border-color: var(--brass-dark);
+    }
+    .m-btn.active {
+      background: var(--brass);
+      color: #0c0802;
+      border-color: #ffe082;
+      box-shadow: 0 0 8px var(--amber);
+    }
+    .m-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+
+    /* Mission Intel CRT Display */
+    .intel-display {
+      background: var(--crt-bg);
+      border: 2px solid #14401e;
+      border-radius: 6px;
+      padding: 10px;
+      color: #6eff88;
+      font-size: 0.75rem;
+      line-height: 1.4;
+      min-height: 140px;
+      max-height: 160px;
+      overflow-y: auto;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+      position: relative;
+    }
+    .intel-title {
+      color: #afffb8;
+      font-weight: bold;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .intel-cipher-badge {
+      display: inline-block;
+      background: #092e13;
+      border: 1px solid var(--crt-green);
+      color: #fff;
+      font-size: 0.65rem;
+      padding: 2px 6px;
+      border-radius: 3px;
+      margin-bottom: 6px;
+    }
+
+    /* Decryption Terminal & Keypad */
+    .deck-terminal {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .copy-intel-btn {
+      background: #2b1f13;
+      border: 1px solid var(--brass);
+      color: #ffd88a;
+      padding: 6px;
+      font-family: inherit;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: 0.2s;
+      font-weight: bold;
+    }
+    .copy-intel-btn:hover {
+      background: var(--brass);
+      color: #111;
+    }
+    .passcode-input-row {
+      display: flex;
+      gap: 6px;
+    }
+    .steam-input {
+      flex: 1;
+      background: #0a0e14;
+      border: 1px solid var(--brass-dark);
+      color: var(--amber);
+      padding: 8px;
+      font-family: inherit;
+      font-size: 0.8rem;
+      border-radius: 4px;
+      outline: none;
+    }
+    .steam-input:focus {
+      border-color: var(--amber);
+      box-shadow: 0 0 6px var(--amber-dim);
+    }
+    .steam-submit {
+      background: linear-gradient(180deg, #b86230 0%, #6e3010 100%);
+      border: 1px solid #ff9b66;
+      color: #fff;
+      font-family: inherit;
+      font-weight: bold;
+      padding: 0 14px;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .steam-submit:hover {
+      background: #e27d3c;
+    }
+
+    /* Terminal Output / Feedback Log */
+    .deck-log {
+      font-size: 0.7rem;
+      color: #8da4be;
+      min-height: 38px;
+      line-height: 1.3;
+    }
+    .deck-log.success { color: #55ff77; }
+    .deck-log.error { color: #ff5555; }
+
+    /* Controls Guide Footer */
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #11161d;
+      border: 1px solid var(--steel-light);
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      color: #92a3b5;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .key-tag {
+      background: #25313f;
+      color: #fff;
+      padding: 2px 6px;
+      border-radius: 3px;
+      border-bottom: 2px solid #141b24;
+      font-weight: bold;
+    }
+    #artifactBox { background:#fff; padding:8px; border-radius:4px; text-align:center; display:flex; flex-direction:column; gap:6px; align-items:center; }
+    #artifactBox[hidden] { display:none; }
+    #codebook { color:#c59b27; word-break:break-all; }
+    .m-btn.solved::after { content:'✔'; margin-left:2px; color:#33ff66; font-size:.6rem; }
+  </style>
+</head>
+<body>
+
+<div id="chassis">
+  <div class="rivet r-tl"></div>
+  <div class="rivet r-tr"></div>
+  <div class="rivet r-bl"></div>
+  <div class="rivet r-br"></div>
+  <div class="rivet r-tm"></div>
+  <div class="rivet r-bm"></div>
+
+  <!-- Header Section -->
+  <header>
+    <div class="brand">
+      <div class="logo-stamp">TEAM LEGACY</div>
+      <div class="operation-title">BLACK CHAMBER // PROTOCOL STEG-10</div>
+    </div>
+    <div class="aux-tools">
+      <button class="audio-btn" id="audioToggle">🔊 SOUND: ON</button>
+      <a href="https://2ndchances520.github.io/OmniToolV3/" target="_blank" class="omni-link" title="Open TeamLegacy Omnitool V3 in a new tab">↗ OMNITOOL V3</a>
+      <a href="https://people.physik.hu-berlin.de/~palloks/js/enigma/enigma-u_v20_en.html" target="_blank" class="omni-link" title="Enigma Machine Simulator">⚙ ENIGMA SIM</a>
+      <button class="reset-btn" id="resetProgressBtn">↺ RESET</button>
+    </div>
+  </header>
+
+  <!-- Vacuum Tubes Bank -->
+  <div class="tubes-bank">
+    <div class="tube"><div class="tube-filament"></div></div>
+    <div class="tube"><div class="tube-filament" style="animation-delay: 0.4s"></div></div>
+    <div class="tube"><div class="tube-filament" style="animation-delay: 1.1s"></div></div>
+    <div class="tube"><div class="tube-filament" style="animation-delay: 0.7s"></div></div>
+    <div class="tube"><div class="tube-filament" style="animation-delay: 1.5s"></div></div>
+  </div>
+
+  <!-- Main Viewport (Hybrid Stealth Canvas + Steampunk Deck Terminal) -->
+  <div class="viewport-grid">
+    <!-- Top-Down 2D Exploration Field Canvas -->
+    <div class="field-enclosure">
+      <canvas id="gameCanvas" width="700" height="480"></canvas>
+      <div class="crt-scanlines"></div>
+      <div class="field-hud">
+        <div class="hud-badge" id="hudMission">SECTOR 1: EMBASSY DEAD DROP</div>
+        <div class="hud-stealth" id="hudAlert">STATUS: UNDETECTED</div>
+      </div>
+    </div>
+
+    <!-- Legacy Steampunk Cyber Deck Panel -->
+    <div class="steam-deck">
+      <div class="deck-header">
+        <span>LEGACY CYBER DECK V3</span>
+        <div class="nixie-digits" id="nixieCounter">M-01</div>
+      </div>
+
+      <!-- Detective Animated Portrait -->
+      <div class="portrait-box">
+        <canvas id="portraitCanvas" width="64" height="64"></canvas>
+        <div class="agent-meta">
+          <div class="agent-name">OPERATIVE LEGACY</div>
+          <div class="agent-status" id="agentRank">CLEARANCE: RANK 1</div>
+          <div style="color:#788b9e; font-size: 0.68rem; margin-top:2px;">Magnifier & Fedora Active</div>
+        </div>
+      </div>
+
+      <!-- 6 Mission Selectors -->
+      <div class="mission-select-row">
+        <button class="m-btn active unlocked" id="mbtn-0" onclick="selectMission(0)">I</button>
+        <button class="m-btn" id="mbtn-1" onclick="selectMission(1)" disabled>II</button>
+        <button class="m-btn" id="mbtn-2" onclick="selectMission(2)" disabled>III</button>
+        <button class="m-btn" id="mbtn-3" onclick="selectMission(3)" disabled>IV</button>
+        <button class="m-btn" id="mbtn-4" onclick="selectMission(4)" disabled>V</button>
+        <button class="m-btn" id="mbtn-5" onclick="selectMission(5)" disabled>VI</button>
+        <button class="m-btn" id="mbtn-6" onclick="selectMission(6)" disabled>VII</button>
+        <button class="m-btn" id="mbtn-7" onclick="selectMission(7)" disabled>VIII</button>
+        <button class="m-btn" id="mbtn-8" onclick="selectMission(8)" disabled>IX</button>
+        <button class="m-btn" id="mbtn-9" onclick="selectMission(9)" disabled>X</button>
+      </div>
+
+      <!-- Dossier / Intel CRT Display -->
+      <div class="intel-display" id="intelBox">
+        <div class="intel-title" id="intelTitle">OPERATION DEAD DROP</div>
+        <div class="intel-cipher-badge" id="intelCipherTag">OMNITOOL // ZERO-WIDTH STEGANOGRAPHY</div>
+        <p id="intelBody">Locate the diplomatic dispatch hidden in the archive safe. Use your magnifying glass [E] to lift the paper, then extract the zero-width secret using OmniTool V3 Steganography.</p>
+      </div>
+
+      <!-- Decryption Deck Keypad & Actions -->
+      <div class="deck-terminal">
+        <button class="copy-intel-btn" id="copyInterceptBtn" onclick="copyInterceptData()">📋 COPY INTEL FOR OMNITOOL</button>
+        <div id="artifactBox" hidden></div>
+        <div id="codebook" class="deck-log"></div>
+        <div class="passcode-input-row">
+          <input type="text" id="passcodeInput" class="steam-input" placeholder="ENTER DECODED CIPHERTEXT..." autocomplete="off">
+          <button class="steam-submit" onclick="submitPasscode()">DECRYPT</button>
+        </div>
+        <div class="deck-log" id="deckLog">System standby. Infiltrate sector and gather intelligence.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Navigation & Controls Guide -->
+  <footer>
+    <div>
+      <span class="key-tag">WASD</span> or <span class="key-tag">ARROWS</span> to Sneak & Move &nbsp;|&nbsp;
+      <span class="key-tag">E</span> or <span class="key-tag">SPACE</span> Search Safe / Examine with Magnifying Glass
+    </div>
+    <div>Branded for <strong style="color:var(--brass)">TEAM LEGACY</strong> • Compatible with Omnitool V3</div>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+/* ==========================================================================
+   AUDIO SYNTHESIZER (Web Audio API - No external files needed)
+   ========================================================================== */
+const AudioEngine = {
+  ctx: null,
+  enabled: true,
+  init() {
+    if (!this.ctx) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      this.ctx = new AudioCtx();
+    }
+  },
+  playTone(freq, type, duration, vol=0.1) {
+    if (!this.enabled) return;
+    this.init();
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+      gain.gain.setValueAtTime(vol, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + duration);
+    } catch(e) {}
+  },
+  footstep() { this.playTone(80 + Math.random()*30, 'triangle', 0.05, 0.04); },
+  inspect() { 
+    this.playTone(440, 'sine', 0.08, 0.1); 
+    setTimeout(() => this.playTone(660, 'sine', 0.1, 0.08), 80);
+  },
+  success() {
+    [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+      setTimeout(() => this.playTone(f, 'square', 0.18, 0.09), i * 90);
+    });
+  },
+  alert() {
+    this.playTone(280, 'sawtooth', 0.25, 0.15);
+  },
+  click() { this.playTone(1200, 'square', 0.02, 0.05); }
+};
+
+document.getElementById('audioToggle').addEventListener('click', function() {
+  AudioEngine.enabled = !AudioEngine.enabled;
+  this.textContent = AudioEngine.enabled ? '🔊 SOUND: ON' : '🔈 SOUND: OFF';
+  AudioEngine.click();
+});
+
+/* ==========================================================================
+   OMNITOOL V3 STEGANOGRAPHY ENGINE SPECIFICATION MATCH
+   ZERO = '\u200B' (Zero-Width Space), ONE = '\u200C' (Zero-Width Non-Joiner)
+   UTF-8 binary injected after char 0 of public cover text.
+   ========================================================================== */
+const ZERO = '\u200B', ONE = '\u200C';
+
+function textToBinary(text){
+  return [...new TextEncoder().encode(text)].map(b => b.toString(2).padStart(8, '0')).join('');
+}
+function embedOmniSteg(publicMsg, secretMsg) {
+  if (!secretMsg) return publicMsg;
+  const binary = textToBinary(secretMsg);
+  const hiddenStr = [...binary].map(bit => bit === '0' ? ZERO : ONE).join('');
+  return publicMsg.length > 0 ? publicMsg.charAt(0) + hiddenStr + publicMsg.slice(1) : hiddenStr;
+}
+
+/* ==========================================================================
+   6 MISSIONS DATA DEFINITION & CYPHERTEXT MATRICES
+   ========================================================================== */
+const MISSIONS = [
+ {
+  "title": "OPERATION DEAD DROP",
+  "sector": "SECTOR 1: EMBASSY ARCHIVE",
+  "cipherType": "OMNITOOL // STEGANOGRAPHY",
+  "safePos": {
+   "x": 580,
+   "y": 100
+  },
+  "playerStart": {
+   "x": 60,
+   "y": 400
+  },
+  "guards": [
+   {
+    "x": 320,
+    "y": 120,
+    "vx": 0,
+    "vy": 2,
+    "min": 100,
+    "max": 360,
+    "dir": "vertical"
+   },
+   {
+    "x": 480,
+    "y": 280,
+    "vx": -2,
+    "vy": 0,
+    "min": 200,
+    "max": 540,
+    "dir": "horizontal"
+   }
+  ],
+  "desc": "Infiltrate the consulate and lift the diplomatic paper [E]. The dispatch looks harmless, but a message is hidden inside it. Copy it into OmniTool and reveal it.",
+  "hint": "OmniTool > Steganography > paste into 'Decode Input' > Reveal Message.",
+  "passcode": "LEGACY-VAPOR-77",
+  "story": "The consulate was a front. Someone inside the Black Chamber is selling secrets.",
+  "stego": {
+   "cover": "Diplomatic Communiqu\u00e9 #492: Regarding the autumn export tariffs on clockwork brass valves, our delegates have reached an amicable preliminary treaty.",
+   "secret": "LEGACY-VAPOR-77"
+  }
+ },
+ {
+  "title": "OPERATION IRON TELEGRAPH",
+  "sector": "SECTOR 2: SUB-LEVEL SWITCHBOARD",
+  "cipherType": "OMNITOOL // BASE64 VAULT",
+  "safePos": {
+   "x": 600,
+   "y": 380
+  },
+  "playerStart": {
+   "x": 70,
+   "y": 80
+  },
+  "guards": [
+   {
+    "x": 200,
+    "y": 220,
+    "vx": 2.2,
+    "vy": 0,
+    "min": 140,
+    "max": 480,
+    "dir": "horizontal"
+   },
+   {
+    "x": 420,
+    "y": 340,
+    "vx": 0,
+    "vy": -2,
+    "min": 180,
+    "max": 420,
+    "dir": "vertical"
+   }
+  ],
+  "desc": "The pneumatic teletype holds a Base64 credential. Reach the switchboard safe, copy the data, and decode it.",
+  "hint": "OmniTool > Base64 Vault > 'Base64 \u2192 Text / File' > paste > Decode \u2192 Text.",
+  "passcode": "SUBMERSIBLE_DOCK_DELTA_904",
+  "story": "A submarine dock appears on every telegram. The leak is moving cargo, not just words.",
+  "rawIntercept": "U1VCTUVSU0lCTEVfRE9DS19ERUxUQV85MDQ="
+ },
+ {
+  "title": "OPERATION SKY LEVIATHAN",
+  "sector": "SECTOR 3: ZEPPELIN MOORING GANTRY",
+  "cipherType": "OMNITOOL // ASCII85 VAULT",
+  "safePos": {
+   "x": 610,
+   "y": 120
+  },
+  "playerStart": {
+   "x": 70,
+   "y": 400
+  },
+  "guards": [
+   {
+    "x": 260,
+    "y": 160,
+    "vx": 0,
+    "vy": 2.5,
+    "min": 100,
+    "max": 380,
+    "dir": "vertical"
+   },
+   {
+    "x": 450,
+    "y": 240,
+    "vx": -2.5,
+    "vy": 0,
+    "min": 260,
+    "max": 580,
+    "dir": "horizontal"
+   },
+   {
+    "x": 340,
+    "y": 390,
+    "vx": 2,
+    "vy": 0,
+    "min": 180,
+    "max": 460,
+    "dir": "horizontal"
+   }
+  ],
+  "desc": "Climb the gantry and pull the propulsion release code. It is encoded in Ascii85.",
+  "hint": "OmniTool > Ascii85 Vault > 'Ascii85 (Base85) \u2192 Text' > Decode Text.",
+  "passcode": "ZEPPELIN_AERO_IGNITION_5521",
+  "story": "The airship carries a weapon, not passengers. Its codename keeps showing up: Chimera.",
+  "rawIntercept": ">\")7a78-9J?U7+Y:L?[`:.\\DV:JP7S2)6l"
+ },
+ {
+  "title": "OPERATION CLOCKWORK ENIGMA",
+  "sector": "SECTOR 4: SUBTERRANEAN CIPHER BUNKER",
+  "cipherType": "ENIGMA SIMULATOR",
+  "safePos": {
+   "x": 590,
+   "y": 400
+  },
+  "playerStart": {
+   "x": 70,
+   "y": 90
+  },
+  "guards": [
+   {
+    "x": 180,
+    "y": 240,
+    "vx": 0,
+    "vy": 2.5,
+    "min": 120,
+    "max": 410,
+    "dir": "vertical"
+   },
+   {
+    "x": 380,
+    "y": 180,
+    "vx": 2.5,
+    "vy": 0,
+    "min": 200,
+    "max": 540,
+    "dir": "horizontal"
+   },
+   {
+    "x": 490,
+    "y": 320,
+    "vx": 0,
+    "vy": -2,
+    "min": 160,
+    "max": 400,
+    "dir": "vertical"
+   }
+  ],
+  "desc": "Intercepted Enigma traffic. Open the Enigma Simulator (link in the banner or OmniTool): Rotors I-II-III, reflector B, rings 01-01-01, start L-E-G, no plugboard. Type the ciphertext. Spaces are ignored when you answer.",
+  "hint": "Enigma only handles letters, so the answer is words with no digits. Check the start positions are L, E, G.",
+  "passcode": "LEGACYCIPHERKEYEIGHTYEIGHT",
+  "story": "Enigma settings are keyed to your own team name. The traitor knew Legacy's habits.",
+  "rawIntercept": "ENIGMA DISPATCH // ROTORS: I-II-III | REFLECTOR: B | RINGS: 01-01-01 | START: L-E-G | PLUGBOARD: NONE\nCIPHERTEXT: YGLTQ KOSZA GVTSN BAWLA HZDKJ V"
+ },
+ {
+  "title": "OPERATION GHOST EYE",
+  "sector": "SECTOR 5: OPTICAL VAULT TOWER",
+  "cipherType": "OMNITOOL // QR SCANNER",
+  "safePos": {
+   "x": 610,
+   "y": 130
+  },
+  "playerStart": {
+   "x": 60,
+   "y": 400
+  },
+  "guards": [
+   {
+    "x": 220,
+    "y": 140,
+    "vx": 2.5,
+    "vy": 0,
+    "min": 140,
+    "max": 450,
+    "dir": "horizontal"
+   },
+   {
+    "x": 360,
+    "y": 320,
+    "vx": 0,
+    "vy": -2.5,
+    "min": 160,
+    "max": 420,
+    "dir": "vertical"
+   },
+   {
+    "x": 500,
+    "y": 220,
+    "vx": 0,
+    "vy": 2.5,
+    "min": 120,
+    "max": 380,
+    "dir": "vertical"
+   }
+  ],
+  "desc": "The tower camera printed a security plate. Examine the safe, then SHOW the plate. Save it as an image and scan it in OmniTool (or point a webcam at the screen).",
+  "hint": "OmniTool > QR Suite V2 > QR Scanner / Decoder > Upload QR Image.",
+  "passcode": "SPECTRE_CORE_SECURITY_CLEARANCE_ALPHA_443",
+  "story": "SPECTRE is the buyer's name. Chimera was built for them.",
+  "kind": "qr",
+  "rawIntercept": "SPECTRE_CORE_SECURITY_CLEARANCE_ALPHA_443"
+ },
+ {
+  "title": "OPERATION CHIMERA",
+  "sector": "SECTOR 6: GRAND STEAM CORE ARCHIVE",
+  "cipherType": "STEGANOGRAPHY + BASE64",
+  "safePos": {
+   "x": 600,
+   "y": 240
+  },
+  "playerStart": {
+   "x": 60,
+   "y": 240
+  },
+  "guards": [
+   {
+    "x": 240,
+    "y": 120,
+    "vx": 0,
+    "vy": 3,
+    "min": 100,
+    "max": 380,
+    "dir": "vertical"
+   },
+   {
+    "x": 380,
+    "y": 360,
+    "vx": 0,
+    "vy": -3,
+    "min": 100,
+    "max": 380,
+    "dir": "vertical"
+   },
+   {
+    "x": 480,
+    "y": 160,
+    "vx": 2.5,
+    "vy": 0,
+    "min": 280,
+    "max": 580,
+    "dir": "horizontal"
+   },
+   {
+    "x": 480,
+    "y": 320,
+    "vx": -2.5,
+    "vy": 0,
+    "min": 280,
+    "max": 580,
+    "dir": "horizontal"
+   }
+  ],
+  "desc": "A two-stage cipher. Reveal the hidden zero-width message, then decode that Base64 payload to get the override key.",
+  "hint": "Step 1: Steganography reveal. Step 2: Base64 Vault decode.",
+  "passcode": "TEAMLEGACY_CHIMERA_DOOMSDAY_OVERRIDE_2026",
+  "story": "The override works, but it only opens a decoy. The real Chimera files are somewhere deeper.",
+  "stego": {
+   "cover": "PROJECT CHIMERA EXECUTIVE OVERRIDE // CLASSIFIED EYES ONLY: Steam turbine pressure regulation has been locked under Black Chamber protocol.",
+   "secret": "VEVBTUxFR0FDWV9DSElNRVJBX0RPT01TREFZX09WRVJSSURFXzIwMjY="
+  }
+ },
+ {
+  "title": "OPERATION GHOST NEGATIVE",
+  "sector": "SECTOR 7: DARKROOM ANNEX",
+  "cipherType": "OMNITOOL // BASE64 FILE DECODE",
+  "safePos": {
+   "x": 120,
+   "y": 400
+  },
+  "playerStart": {
+   "x": 600,
+   "y": 70
+  },
+  "guards": [
+   {
+    "x": 300,
+    "y": 150,
+    "vx": 2.8,
+    "vy": 0,
+    "min": 160,
+    "max": 560,
+    "dir": "horizontal"
+   },
+   {
+    "x": 400,
+    "y": 300,
+    "vx": -2.8,
+    "vy": 0,
+    "min": 160,
+    "max": 560,
+    "dir": "horizontal"
+   },
+   {
+    "x": 560,
+    "y": 220,
+    "vx": 0,
+    "vy": 2.5,
+    "min": 120,
+    "max": 400,
+    "dir": "vertical"
+   }
+  ],
+  "desc": "The code is a photograph, sent as Base64. Copy it, decode it in the Base64 Vault as a file (image/png), and read what is written on it.",
+  "hint": "OmniTool > Base64 Vault > Base64 \u2192 Text / File > set MIME to image/png > Preview Media (or Decode \u2192 Download File).",
+  "passcode": "CINDER_LANTERN_0615",
+  "story": "The photograph shows a lantern-lit meeting. Three agents. One face is torn away.",
+  "kind": "png"
+ },
+ {
+  "title": "OPERATION NESTING DOLLS",
+  "sector": "SECTOR 8: RELAY TUNNEL",
+  "cipherType": "ASCII85 THEN BASE64",
+  "safePos": {
+   "x": 330,
+   "y": 420
+  },
+  "playerStart": {
+   "x": 60,
+   "y": 70
+  },
+  "guards": [
+   {
+    "x": 200,
+    "y": 200,
+    "vx": 0,
+    "vy": 3,
+    "min": 100,
+    "max": 400,
+    "dir": "vertical"
+   },
+   {
+    "x": 330,
+    "y": 300,
+    "vx": 0,
+    "vy": -3,
+    "min": 100,
+    "max": 400,
+    "dir": "vertical"
+   },
+   {
+    "x": 460,
+    "y": 200,
+    "vx": 0,
+    "vy": 3,
+    "min": 100,
+    "max": 400,
+    "dir": "vertical"
+   },
+   {
+    "x": 260,
+    "y": 110,
+    "vx": 2.8,
+    "vy": 0,
+    "min": 160,
+    "max": 560,
+    "dir": "horizontal"
+   }
+  ],
+  "desc": "Two layers deep. Decode the Ascii85, and the result still looks scrambled. Decode that again.",
+  "hint": "Ascii85 Vault first, then paste the result into Base64 Vault.",
+  "passcode": "BRASS_MERIDIAN_SIGNAL",
+  "story": "The relay tunnel feeds a clock tower across the river. That is where the final dossier waits.",
+  "rawIntercept": ";/Aik<A@6\\<)lst;cQ^f;,oJc<A85[<,4rt"
+ },
+ {
+  "title": "OPERATION PLATE AND PAYLOAD",
+  "sector": "SECTOR 9: CLOCK TOWER",
+  "cipherType": "QR THEN BASE64",
+  "safePos": {
+   "x": 330,
+   "y": 60
+  },
+  "playerStart": {
+   "x": 60,
+   "y": 420
+  },
+  "guards": [
+   {
+    "x": 250,
+    "y": 360,
+    "vx": 3,
+    "vy": 0,
+    "min": 140,
+    "max": 560,
+    "dir": "horizontal"
+   },
+   {
+    "x": 420,
+    "y": 240,
+    "vx": -3,
+    "vy": 0,
+    "min": 140,
+    "max": 560,
+    "dir": "horizontal"
+   },
+   {
+    "x": 200,
+    "y": 200,
+    "vx": 0,
+    "vy": 3,
+    "min": 100,
+    "max": 400,
+    "dir": "vertical"
+   },
+   {
+    "x": 520,
+    "y": 300,
+    "vx": 0,
+    "vy": -3,
+    "min": 120,
+    "max": 400,
+    "dir": "vertical"
+   }
+  ],
+  "desc": "The plate in the clock tower reads as Base64. Scan it, then decode what the scan gives you.",
+  "hint": "QR Scanner first, then Base64 Vault.",
+  "passcode": "OBSIDIAN_ORRERY_1888",
+  "story": "The final dossier is sealed in four layers. The seal's key is your own trail.",
+  "kind": "qr",
+  "rawIntercept": "T0JTSURJQU5fT1JSRVJZXzE4ODg="
+ },
+ {
+  "title": "OPERATION BLACK CHAMBER",
+  "sector": "SECTOR 10: THE CHAMBER ITSELF",
+  "cipherType": "STEGO > ASCII85 > BASE64 > ENIGMA",
+  "safePos": {
+   "x": 600,
+   "y": 240
+  },
+  "playerStart": {
+   "x": 60,
+   "y": 240
+  },
+  "guards": [
+   {
+    "x": 200,
+    "y": 120,
+    "vx": 0,
+    "vy": 3.2,
+    "min": 90,
+    "max": 390,
+    "dir": "vertical"
+   },
+   {
+    "x": 320,
+    "y": 380,
+    "vx": 0,
+    "vy": -3.2,
+    "min": 90,
+    "max": 390,
+    "dir": "vertical"
+   },
+   {
+    "x": 460,
+    "y": 150,
+    "vx": 3,
+    "vy": 0,
+    "min": 260,
+    "max": 600,
+    "dir": "horizontal"
+   },
+   {
+    "x": 460,
+    "y": 330,
+    "vx": -3,
+    "vy": 0,
+    "min": 260,
+    "max": 600,
+    "dir": "horizontal"
+   },
+   {
+    "x": 540,
+    "y": 240,
+    "vx": 0,
+    "vy": 3,
+    "min": 100,
+    "max": 380,
+    "dir": "vertical"
+   }
+  ],
+  "desc": "The final dossier. Reveal the hidden text, peel Ascii85, then Base64, to reach Enigma ciphertext. Rotors I-II-III, reflector B, rings 01-01-01, no plugboard. START POSITION: the first letters of the codes recovered in Sectors 1, 2 and 3 (see RECOVERED CODES).",
+  "hint": "Start letters: first letter of the Sector 1, 2 and 3 codes, in that order.",
+  "passcode": "TEAMLEGACYCLOSESTHECHAMBER",
+  "story": "Chimera is disarmed. The traitor's name was in the first three codes all along. Team Legacy closes the Chamber.",
+  "stego": {
+   "cover": "BLACK CHAMBER ARCHIVE INDEX // FINAL ENTRY: all records sealed, all agents accounted for.",
+   "secret": "<(0\\Y;/9uJ;FO2d<(:\\+=%,,X;J^#B<AAGn;cQ_(=%5J="
+  }
+ }
+];
+MISSIONS.forEach(m => { if (m.stego) m.rawIntercept = embedOmniSteg(m.stego.cover, m.stego.secret); });
+function makePngB64(txt) {
+  const c = document.createElement('canvas'); c.width = 360; c.height = 70;
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, 360, 70);
+  g.strokeStyle = '#ddd'; for (let i = 0; i < MISSIONS.length; i++) { g.beginPath(); g.moveTo(0, i * 14); g.lineTo(360, i * 14 + 8); g.stroke(); }
+  g.fillStyle = '#111'; g.font = 'bold 22px "Courier New"'; g.textAlign = 'center'; g.fillText(txt, 180, 42);
+  return c.toDataURL('image/png').split(',')[1];
+}
+MISSIONS.forEach(m => { if (m.kind === 'png') m.rawIntercept = makePngB64(m.passcode); });
+const norm = s => s.toUpperCase().replace(/[^A-Z0-9]/g, '');
+const $ = id => document.getElementById(id);
+
+/* ==========================================================================
+   GAME STATE & PERSISTENCE (localStorage)
+   ========================================================================== */
+let currentMissionIdx = 0;
+let unlockedMissions = MISSIONS.map((_, i) => i === 0);
+let solvedMissions = MISSIONS.map(() => false);
+let safeFoundThisMission = false;
+
+function loadSaveData() {
+  try {
+    const saved = localStorage.getItem('teamlegacy_spy_save');
+    if (saved) {
+      const data = JSON.parse(saved);
+      if (Array.isArray(data.unlocked)) unlockedMissions = MISSIONS.map((_, i) => i === 0 || !!data.unlocked[i]);
+      if (Array.isArray(data.solved)) solvedMissions = MISSIONS.map((_, i) => !!data.solved[i]);
+      if (typeof data.current === 'number' && unlockedMissions[data.current]) currentMissionIdx = data.current;
+    }
+  } catch(e) {}
+}
+
+function writeSaveData() {
+  try {
+    const data = {
+      unlocked: unlockedMissions,
+      solved: solvedMissions,
+      current: currentMissionIdx
+    };
+    localStorage.setItem('teamlegacy_spy_save', JSON.stringify(data));
+  } catch(e) {}
+}
+
+document.getElementById('resetProgressBtn').addEventListener('click', () => {
+  if (confirm("Reset operative credentials and lock all sectors?")) {
+    localStorage.removeItem('teamlegacy_spy_save');
+    unlockedMissions = MISSIONS.map((_, i) => i === 0);
+    solvedMissions = MISSIONS.map(() => false);
+    currentMissionIdx = 0;
+    selectMission(0);
+  }
+});
+
+/* ==========================================================================
+   PROCEDURAL PIXEL ART SPRITE ENGINE
+   Recreates the uploaded sprite sheet:
+   - Fedora Hat + Dark Sunglasses + Trenchcoat + Collar & Belt + Magnifying Glass
+   ========================================================================== */
+const SpriteEngine = {
+  // Slices & draws detective to canvas context
+  drawDetective(ctx, x, y, dir, isWalking, isSearching, walkFrame) {
+    ctx.save();
+    ctx.translate(Math.round(x), Math.round(y));
+
+    const coat = "#4a3c31";
+    const coatDark = "#32271e";
+    const coatLight = "#614e40";
+    const hat = "#363a40";
+    const hatBand = "#1f2226";
+    const skin = "#d8a47f";
+    const glasses = "#111418";
+    const glassRim = "#00e5ff";
+    const shoes = "#241812";
+
+    const bob = isWalking ? Math.sin(walkFrame * Math.PI) * 2 : 0;
+    const legOffset = isWalking ? Math.sin(walkFrame * Math.PI) * 4 : 0;
+
+    // Magnifying glass / search crouch pose
+    if (isSearching) {
+      // Crouched pose
+      ctx.fillStyle = coatDark;
+      ctx.fillRect(-8, -10, 16, 12);
+      ctx.fillStyle = coat;
+      ctx.fillRect(-7, -9, 14, 10);
+      // Legs crouched
+      ctx.fillStyle = coatDark;
+      ctx.fillRect(-9, 2, 7, 6);
+      ctx.fillRect(2, 2, 7, 6);
+      ctx.fillStyle = shoes;
+      ctx.fillRect(-11, 7, 8, 3);
+      ctx.fillRect(3, 7, 8, 3);
+      // Head tilted down
+      ctx.fillStyle = hat;
+      ctx.fillRect(-7, -22, 14, 7);
+      ctx.fillRect(-11, -16, 22, 3);
+      ctx.fillStyle = glasses;
+      ctx.fillRect(-4, -13, 8, 3);
+      // Arm holding magnifying glass forward
+      ctx.fillStyle = coatLight;
+      ctx.fillRect(4, -8, 8, 4);
+      // Magnifier
+      ctx.strokeStyle = "#c59b27";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(16, -6, 5, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(100, 220, 255, 0.45)";
+      ctx.fill();
+      ctx.fillStyle = "#8a5829";
+      ctx.fillRect(12, -4, 4, 2);
+      ctx.restore();
+      return;
+    }
+
+    // --- STANDARD STANDING / WALKING SPRITE ---
+    // Legs & Shoes
+    ctx.fillStyle = coatDark;
+    ctx.fillRect(-6, 8, 4, 8 + legOffset);
+    ctx.fillRect(2, 8, 4, 8 - legOffset);
+    ctx.fillStyle = shoes;
+    ctx.fillRect(-7, 15 + legOffset, 5, 4);
+    ctx.fillRect(2, 15 - legOffset, 5, 4);
+
+    // Trenchcoat body
+    ctx.fillStyle = coatDark;
+    ctx.fillRect(-9, -12 + bob, 18, 20);
+    ctx.fillStyle = coat;
+    ctx.fillRect(-8, -11 + bob, 16, 18);
+    // Trenchcoat collar & belt
+    ctx.fillStyle = coatLight;
+    ctx.fillRect(-7, -10 + bob, 4, 7);
+    ctx.fillRect(3, -10 + bob, 4, 7);
+    ctx.fillStyle = coatDark;
+    ctx.fillRect(-8, -2 + bob, 16, 3); // Belt
+    ctx.fillStyle = "#baa157";
+    ctx.fillRect(-2, -2 + bob, 4, 3); // Belt buckle
+
+    // Head & Face
+    ctx.fillStyle = skin;
+    ctx.fillRect(-5, -20 + bob, 10, 9);
+
+    if (dir === 'down') {
+      // Sunglasses front
+      ctx.fillStyle = glasses;
+      ctx.fillRect(-5, -18 + bob, 4, 3);
+      ctx.fillRect(1, -18 + bob, 4, 3);
+      ctx.fillStyle = glassRim;
+      ctx.fillRect(-4, -18 + bob, 1, 1);
+      ctx.fillRect(2, -18 + bob, 1, 1);
+    } else if (dir === 'left') {
+      ctx.fillStyle = glasses;
+      ctx.fillRect(-5, -18 + bob, 4, 3);
+    } else if (dir === 'right') {
+      ctx.fillStyle = glasses;
+      ctx.fillRect(1, -18 + bob, 4, 3);
+    } // Up dir shows back of hat
+
+    // Fedora Hat
+    ctx.fillStyle = hat;
+    ctx.fillRect(-6, -28 + bob, 12, 8); // Crown
+    ctx.fillStyle = hatBand;
+    ctx.fillRect(-6, -22 + bob, 12, 2); // Ribbon band
+    ctx.fillStyle = hat;
+    ctx.fillRect(-10, -21 + bob, 20, 3); // Brim
+
+    // Hand holding Magnifying Glass
+    if (dir === 'right' || dir === 'down') {
+      ctx.fillStyle = skin;
+      ctx.fillRect(8, -6 + bob, 3, 3);
+      // Magnifying glass rim & lens
+      ctx.strokeStyle = "#c59b27";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(14, -8 + bob, 4, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(80, 220, 255, 0.4)";
+      ctx.fill();
+      // Handle
+      ctx.fillStyle = "#8a5829";
+      ctx.fillRect(10, -5 + bob, 3, 2);
+    } else if (dir === 'left') {
+      ctx.fillStyle = skin;
+      ctx.fillRect(-11, -6 + bob, 3, 3);
+      ctx.strokeStyle = "#c59b27";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(-16, -8 + bob, 4, 0, Math.PI*2);
+      ctx.stroke();
+      ctx.fillStyle = "rgba(80, 220, 255, 0.4)";
+      ctx.fill();
+      ctx.fillStyle = "#8a5829";
+      ctx.fillRect(-13, -5 + bob, 3, 2);
+    }
+
+    ctx.restore();
+  },
+
+  // Renders the Large Detective Portrait into the Deck Box
+  renderDeckPortrait(time) {
+    const canvas = document.getElementById('portraitCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 64, 64);
+
+    // Background vignette
+    const bgGrad = ctx.createRadialGradient(32, 32, 4, 32, 32, 36);
+    bgGrad.addColorStop(0, '#1d2733');
+    bgGrad.addColorStop(1, '#090d12');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, 64, 64);
+
+    // Coat & Shoulders
+    ctx.fillStyle = "#3a2d24";
+    ctx.beginPath();
+    ctx.moveTo(10, 64);
+    ctx.lineTo(20, 42);
+    ctx.lineTo(44, 42);
+    ctx.lineTo(54, 64);
+    ctx.fill();
+
+    // Lapel & Tie
+    ctx.fillStyle = "#554234";
+    ctx.fillRect(26, 42, 12, 22);
+    ctx.fillStyle = "#111";
+    ctx.fillRect(30, 46, 4, 16);
+
+    // Face
+    ctx.fillStyle = "#d8a47f";
+    ctx.fillRect(22, 25, 20, 18);
+    // Jaw shade
+    ctx.fillStyle = "#b88360";
+    ctx.fillRect(22, 39, 20, 4);
+
+    // Dark Sunglasses
+    ctx.fillStyle = "#11151a";
+    ctx.fillRect(21, 28, 9, 6);
+    ctx.fillRect(34, 28, 9, 6);
+    ctx.fillRect(29, 30, 6, 2);
+    // Sunglasses sheen
+    const glint = (Math.sin(time * 0.003) + 1) * 0.5;
+    ctx.fillStyle = `rgba(80, 240, 255, ${0.3 + glint * 0.4})`;
+    ctx.fillRect(23, 29, 3, 3);
+    ctx.fillRect(36, 29, 3, 3);
+
+    // Fedora
+    ctx.fillStyle = "#2e333a";
+    ctx.fillRect(18, 8, 28, 16); // Crown
+    ctx.fillStyle = "#1c1f24";
+    ctx.fillRect(18, 20, 28, 4); // Band
+    ctx.fillStyle = "#363d47";
+    ctx.fillRect(8, 22, 48, 5); // Wide Brim
+
+    // Magnifying Glass held up with glint
+    ctx.save();
+    ctx.translate(14, 44);
+    ctx.strokeStyle = "#c59b27";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(0, 0, 11, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = `rgba(130, 225, 255, 0.35)`;
+    ctx.fill();
+    // Glass reflex glint
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(-5, -6, 4, 2);
+    ctx.restore();
+  }
+};
+
+/* ==========================================================================
+   STEALTH FIELD & CANVAS ENGINE
+   ========================================================================== */
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const player = {
+  x: 60,
+  y: 400,
+  speed: 3.2,
+  dir: 'down',
+  isWalking: false,
+  isSearching: false,
+  searchTimer: 0,
+  walkFrame: 0
+};
+
+const keys = {};
+window.addEventListener('keydown', (e) => {
+  keys[e.key.toLowerCase()] = true;
+  if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase())) {
+    e.preventDefault();
+  }
+  if (e.key.toLowerCase() === 'e' || e.key === ' ') {
+    triggerExamine();
+  }
+});
+window.addEventListener('keyup', (e) => {
+  keys[e.key.toLowerCase()] = false;
+});
+
+// Switch active mission
+function selectMission(idx) {
+  if (!unlockedMissions[idx]) return;
+  currentMissionIdx = idx;
+  safeFoundThisMission = false;
+
+  const m = MISSIONS[idx];
+  player.x = m.playerStart.x;
+  player.y = m.playerStart.y;
+  player.dir = 'down';
+
+  // Update HUD & Steampunk Deck
+  document.getElementById('hudMission').textContent = m.sector;
+  document.getElementById('nixieCounter').textContent = `M-${String(idx + 1).padStart(2, '0')}`;
+  document.getElementById('intelTitle').textContent = m.title;
+  document.getElementById('intelCipherTag').textContent = m.cipherType;
+  document.getElementById('intelBody').textContent = m.desc;
+  document.getElementById('deckLog').textContent = "Operative deployed. Infiltrate safe and extract cipher dispatch.";
+  document.getElementById('deckLog').className = "deck-log";
+  document.getElementById('passcodeInput').value = "";
+
+  // Update tabs
+  for (let i = 0; i < MISSIONS.length; i++) {
+    const btn = document.getElementById(`mbtn-${i}`);
+    btn.className = `m-btn ${unlockedMissions[i] ? 'unlocked' : ''} ${solvedMissions[i] ? 'solved' : ''} ${i === idx ? 'active' : ''}`;
+    btn.disabled = !unlockedMissions[i];
+  }
+
+  const ab = $('artifactBox'); ab.hidden = true; ab.innerHTML = '';
+  $('copyInterceptBtn').textContent = m.kind === 'qr' ? '📷 SHOW INTEL PLATE (QR)' : '📋 COPY INTEL FOR OMNITOOL';
+  renderCodebook(); refreshRank();
+  AudioEngine.click();
+  writeSaveData();
+}
+
+// Check distance to safe
+function triggerExamine() {
+  const m = MISSIONS[currentMissionIdx];
+  const dist = Math.hypot(player.x - m.safePos.x, player.y - m.safePos.y);
+
+  player.isSearching = true;
+  player.searchTimer = 35;
+  AudioEngine.inspect();
+
+  if (dist < 52) {
+    safeFoundThisMission = true;
+    AudioEngine.success();
+    const logEl = document.getElementById('deckLog');
+    logEl.innerHTML = `★ INTEL ACQUIRED! Click <strong>[COPY INTEL FOR OMNITOOL]</strong> and decode via ${m.cipherType}.`;
+    logEl.className = "deck-log success";
+  } else {
+    document.getElementById('deckLog').textContent = "Examining floor... No safe or dead drop at this position.";
+    document.getElementById('deckLog').className = "deck-log";
+  }
+}
+
+// Copy intercept to clipboard for OmniTool
+function copyInterceptData() {
+  const m = MISSIONS[currentMissionIdx];
+  if (!safeFoundThisMission && !solvedMissions[currentMissionIdx]) {
+    alert("Operative note: You must inspect the sector Safe Box [E] first to lift the dispatch!");
+    return;
+  }
+  if (m.kind === 'qr') { AudioEngine.click(); showQR(m.rawIntercept); return; }
+  navigator.clipboard.writeText(m.rawIntercept).then(() => {
+    AudioEngine.click();
+    const logEl = document.getElementById('deckLog');
+    logEl.textContent = `Copied raw intercept to clipboard! Paste directly into OmniTool V3.`;
+    logEl.className = "deck-log success";
+  }).catch(() => {
+    prompt("Copy intercept data below:", m.rawIntercept);
+  });
+}
+
+function renderCodebook() {
+  const got = MISSIONS.filter((m, i) => solvedMissions[i]).map(m => m.passcode);
+  $('codebook').textContent = 'RECOVERED CODES: ' + (got.length ? got.join(' | ') : 'none yet');
+}
+function refreshRank() {
+  const n = solvedMissions.filter(Boolean).length;
+  $('agentRank').textContent = n >= MISSIONS.length ? 'CLEARANCE: MASTER SLEUTH' : `CLEARANCE: RANK ${n + 1}`;
+}
+function showQR(text) {
+  const box = $('artifactBox'); box.hidden = false; box.innerHTML = '';
+  if (typeof qrcode !== 'function') { box.textContent = 'QR library blocked. Raw plate data: ' + text; return; }
+  const q = qrcode(0, 'M'); q.addData(text); q.make();
+  const n = q.getModuleCount(), s = 7, pad = 4, size = (n + pad * 2) * s;
+  const c = document.createElement('canvas'); c.width = c.height = size;
+  const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, size, size); g.fillStyle = '#000';
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (q.isDark(r, k)) g.fillRect((k + pad) * s, (r + pad) * s, s, s);
+  c.style.cssText = 'width:100%;max-width:220px;image-rendering:pixelated';
+  const b = document.createElement('button'); b.className = 'copy-intel-btn'; b.textContent = '⬇ SAVE PLATE AS PNG';
+  b.onclick = () => { const a = document.createElement('a'); a.href = c.toDataURL('image/png'); a.download = 'intel-plate.png'; a.click(); };
+  box.append(c, b);
+  $('deckLog').textContent = 'Plate displayed. Save it as PNG and upload it to the OmniTool QR Scanner.'; $('deckLog').className = 'deck-log success';
+}
+// Submit decrypted passcode (ignores case, spaces and punctuation)
+function submitPasscode() {
+  const m = MISSIONS[currentMissionIdx], log = $('deckLog'), i = currentMissionIdx;
+  if (norm($('passcodeInput').value) !== norm(m.passcode)) {
+    AudioEngine.alert();
+    log.textContent = `✖ CIPHER MISMATCH. Hint: ${m.hint}`; log.className = 'deck-log error';
+    return;
+  }
+  AudioEngine.success();
+  solvedMissions[i] = true;
+  const last = i === MISSIONS.length - 1;
+  if (!last) unlockedMissions[i + 1] = true;
+  renderCodebook(); refreshRank(); writeSaveData();
+  log.className = 'deck-log success';
+  log.innerHTML = `✔ VERIFIED. ${m.story}` + (last ? ' 🏆 PROJECT CHIMERA DISARMED.' : ` Sector ${i + 2} unlocked...`);
+  $('mbtn-' + i).classList.add('solved');
+  if (!last) setTimeout(() => { if (currentMissionIdx === i) selectMission(i + 1); }, 4500);
+  else setTimeout(() => alert(`CONGRATULATIONS AGENT!\n\nAll ${MISSIONS.length} sectors cleared. The Black Chamber is closed.`), 300);
+}
+
+/* ==========================================================================
+   MAIN GAME LOOP & ANIMATION
+   ========================================================================== */
+let lastFrameTime = performance.now();
+let alertLevel = 0;
+
+function gameLoop(now) {
+  const dt = (now - lastFrameTime) / 1000;
+  lastFrameTime = now;
+
+  updateGame(dt);
+  renderGame(now);
+  SpriteEngine.renderDeckPortrait(now);
+
+  requestAnimationFrame(gameLoop);
+}
+
+function updateGame(dt) {
+  const m = MISSIONS[currentMissionIdx];
+
+  // Searching crouch countdown
+  if (player.searchTimer > 0) {
+    player.searchTimer--;
+    if (player.searchTimer === 0) player.isSearching = false;
+  }
+
+  // Movement input
+  let dx = 0, dy = 0;
+  if (!player.isSearching) {
+    if (keys['w'] || keys['arrowup']) { dy -= 1; player.dir = 'up'; }
+    if (keys['s'] || keys['arrowdown']) { dy += 1; player.dir = 'down'; }
+    if (keys['a'] || keys['arrowleft']) { dx -= 1; player.dir = 'left'; }
+    if (keys['d'] || keys['arrowright']) { dx += 1; player.dir = 'right'; }
+  }
+
+  if (dx !== 0 && dy !== 0) {
+    dx *= 0.7071;
+    dy *= 0.7071;
+  }
+
+  if (dx !== 0 || dy !== 0) {
+    player.x = Math.max(30, Math.min(670, player.x + dx * player.speed));
+    player.y = Math.max(50, Math.min(440, player.y + dy * player.speed));
+    player.isWalking = true;
+    player.walkFrame += 0.15;
+    if (Math.sin(player.walkFrame * Math.PI) > 0.95) AudioEngine.footstep();
+  } else {
+    player.isWalking = false;
+    player.walkFrame = 0;
+  }
+
+  // Update Patrol Guards
+  let spotted = false;
+  m.guards.forEach(g => {
+    if (g.dir === 'horizontal') {
+      g.x += g.vx;
+      if (g.x > g.max || g.x < g.min) g.vx *= -1;
+    } else {
+      g.y += g.vy;
+      if (g.y > g.max || g.y < g.min) g.vy *= -1;
+    }
+
+    // Vision cone detection
+    const dist = Math.hypot(player.x - g.x, player.y - g.y);
+    if (dist < 65) spotted = true;
+  });
+
+  const hudAlert = document.getElementById('hudAlert');
+  if (spotted) {
+    alertLevel = Math.min(100, alertLevel + 2);
+    hudAlert.textContent = "STATUS: DETECTION WARNING!";
+    hudAlert.style.color = "var(--nixie)";
+    hudAlert.style.borderColor = "var(--nixie)";
+    if (alertLevel % 25 === 0) AudioEngine.alert();
+    if (alertLevel >= 100) {
+      // Caught! Respawn at mission start
+      player.x = m.playerStart.x;
+      player.y = m.playerStart.y;
+      alertLevel = 0;
+      document.getElementById('deckLog').textContent = "CAUGHT BY SEARCHLIGHT PATROL! Repositioned to sector entrance.";
+      document.getElementById('deckLog').className = "deck-log error";
+    }
+  } else {
+    alertLevel = Math.max(0, alertLevel - 1);
+    hudAlert.textContent = "STATUS: UNDETECTED";
+    hudAlert.style.color = "var(--crt-green)";
+    hudAlert.style.borderColor = "var(--crt-green)";
+  }
+}
+
+function renderGame(now) {
+  const m = MISSIONS[currentMissionIdx];
+
+  // Draw Room Floor & Grid
+  ctx.fillStyle = "#11171e";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.strokeStyle = "rgba(40, 55, 70, 0.4)";
+  ctx.lineWidth = 1;
+  for (let x = 0; x < canvas.width; x += 32) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+  }
+  for (let y = 0; y < canvas.height; y += 32) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+  }
+
+  // Draw Brass Wall Trim
+  ctx.fillStyle = "#271b12";
+  ctx.fillRect(0, 0, canvas.width, 18);
+  ctx.fillStyle = "#c59b27";
+  ctx.fillRect(0, 18, canvas.width, 3);
+
+  // Draw Safe Box / Terminal
+  const safe = m.safePos;
+  ctx.save();
+  ctx.fillStyle = "#3a2c1d";
+  ctx.fillRect(safe.x - 16, safe.y - 16, 32, 32);
+  ctx.strokeStyle = safeFoundThisMission ? "#33ff66" : "#c59b27";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(safe.x - 16, safe.y - 16, 32, 32);
+
+  // Safe dial & rivets
+  ctx.fillStyle = "#ffaa22";
+  ctx.beginPath();
+  ctx.arc(safe.x, safe.y, 6, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Floating indicator prompt
+  const distToSafe = Math.hypot(player.x - safe.x, player.y - safe.y);
+  if (distToSafe < 52) {
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 10px 'Courier New'";
+    ctx.textAlign = "center";
+    ctx.fillText("[E] EXAMINE SAFE", safe.x, safe.y - 22);
+  }
+  ctx.restore();
+
+  // Draw Patrol Guards with Search Cones
+  m.guards.forEach(g => {
+    // Searchlight beam
+    ctx.save();
+    ctx.fillStyle = "rgba(255, 200, 50, 0.18)";
+    ctx.beginPath();
+    ctx.arc(g.x, g.y, 60, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    // Guard Automaton / Sentry Sprite
+    ctx.fillStyle = "#2a3644";
+    ctx.fillRect(g.x - 8, g.y - 12, 16, 24);
+    ctx.fillStyle = "#992222";
+    ctx.fillRect(g.x - 4, g.y - 10, 8, 4); // Red optic visor
+    ctx.fillStyle = "#1b232c";
+    ctx.fillRect(g.x - 6, g.y + 12, 4, 6);
+    ctx.fillRect(g.x + 2, g.y + 12, 4, 6);
+  });
+
+  // Draw Detective Player Sprite
+  SpriteEngine.drawDetective(
+    ctx, 
+    player.x, 
+    player.y, 
+    player.dir, 
+    player.isWalking, 
+    player.isSearching, 
+    player.walkFrame
+  );
+}
+
+// Initial Boot
+loadSaveData();
+selectMission(currentMissionIdx);
+requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>
